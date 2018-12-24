@@ -14,7 +14,6 @@ import raf from 'dom-helpers/util/requestAnimationFrame'
 import Popup from './Popup'
 import Overlay from 'react-overlays/lib/Overlay'
 import DateContentRow from './DateContentRow'
-import Header from './Header'
 import DateHeader from './DateHeader'
 
 import { inRange, sortEvents } from './utils/eventLevels'
@@ -216,7 +215,7 @@ class MonthView extends React.Component {
     let { localizer, components } = this.props
     let first = row[0]
     let last = row[row.length - 1]
-    let HeaderComponent = components.header || Header
+    let HeaderComponent = components.header
 
     return dates.range(first, last, 'day').map((day, idx) => (
       <div key={'header_' + idx} className="rbc-header">

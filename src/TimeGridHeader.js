@@ -5,7 +5,6 @@ import React from 'react'
 
 import dates from './utils/dates'
 import DateContentRow from './DateContentRow'
-import Header from './Header'
 import { notify } from './utils/helpers'
 
 class TimeGridHeader extends React.Component {
@@ -34,6 +33,7 @@ class TimeGridHeader extends React.Component {
     onDrillDown: PropTypes.func,
     getDrilldownView: PropTypes.func.isRequired,
     scrollRef: PropTypes.any,
+    bankHolidays: PropTypes.array.isRequired,
   }
 
   handleHeaderClick = (date, view, e) => {
@@ -47,7 +47,8 @@ class TimeGridHeader extends React.Component {
       getDrilldownView,
       getNow,
       getters: { dayProp },
-      components: { header: HeaderComponent = Header },
+      components: { header: HeaderComponent },
+      bankHolidays,
     } = this.props
 
     const today = getNow()
@@ -59,7 +60,7 @@ class TimeGridHeader extends React.Component {
       const { className, style } = dayProp(date)
 
       let header = (
-        <HeaderComponent date={date} label={label} localizer={localizer} />
+        <HeaderComponent date={date} label={label} localizer={localizer} bankHolidays={bankHolidays} />
       )
 
       return (
@@ -73,12 +74,13 @@ class TimeGridHeader extends React.Component {
           )}
         >
           {drilldownView ? (
-            <a
-              href="#"
+            <button
+              type="button"
+              className="rbc-header-button"
               onClick={e => this.handleHeaderClick(date, drilldownView, e)}
             >
               {header}
-            </a>
+            </button>
           ) : (
             <span>{header}</span>
           )}
