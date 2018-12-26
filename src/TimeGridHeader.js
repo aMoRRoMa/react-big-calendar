@@ -74,13 +74,12 @@ class TimeGridHeader extends React.Component {
           )}
         >
           {drilldownView ? (
-            <button
-              type="button"
-              className="rbc-header-button"
+            <a
+              href="#"
               onClick={e => this.handleHeaderClick(date, drilldownView, e)}
             >
               {header}
-            </button>
+            </a>
           ) : (
             <span>{header}</span>
           )}
