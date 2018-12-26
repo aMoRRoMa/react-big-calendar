@@ -5,6 +5,7 @@ import React from 'react'
 
 import dates from './utils/dates'
 import DateContentRow from './DateContentRow'
+import Header from './Header'
 import { notify } from './utils/helpers'
 
 class TimeGridHeader extends React.Component {
@@ -47,7 +48,7 @@ class TimeGridHeader extends React.Component {
       getDrilldownView,
       getNow,
       getters: { dayProp },
-      components: { header: HeaderComponent },
+      components: { header: HeaderComponent = Header },
       bankHolidays,
     } = this.props
 
@@ -60,7 +61,12 @@ class TimeGridHeader extends React.Component {
       const { className, style } = dayProp(date)
 
       let header = (
-        <HeaderComponent date={date} label={label} localizer={localizer} bankHolidays={bankHolidays} />
+        <HeaderComponent
+          date={date}
+          label={label}
+          localizer={localizer}
+          bankHolidays={bankHolidays}
+        />
       )
 
       return (
