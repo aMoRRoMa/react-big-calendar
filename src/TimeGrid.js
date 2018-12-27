@@ -191,6 +191,7 @@ export default class TimeGrid extends Component {
       max,
       showMultiDayTimes,
       longPressThreshold,
+      bankHolidays,
     } = this.props
 
     width = width || this.state.gutterWidth
@@ -229,6 +230,7 @@ export default class TimeGrid extends Component {
         <TimeGridHeader
           range={range}
           events={allDayEvents}
+          bankHolidays={bankHolidays}
           width={width}
           getNow={getNow}
           localizer={localizer}
