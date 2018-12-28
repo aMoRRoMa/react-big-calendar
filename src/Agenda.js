@@ -1,3 +1,5 @@
+import get from 'lodash/get'
+
 import PropTypes from 'prop-types'
 import React from 'react'
 import classes from 'dom-helpers/class'
@@ -8,6 +10,9 @@ import dates from './utils/dates'
 import { navigate } from './utils/constants'
 import { inRange } from './utils/eventLevels'
 import { isSelected } from './utils/selection'
+
+const getEventComponent = (componentsMap, type) =>
+  get(componentsMap, type, null)
 
 class Agenda extends React.Component {
   static propTypes = {
@@ -84,7 +89,7 @@ class Agenda extends React.Component {
       getters,
       accessors,
       localizer,
-      components: { event: Event, date: AgendaDate },
+      components: { event: eventComponentsMap, date: AgendaDate },
     } = this.props
 
     events = events.filter(e =>
@@ -116,7 +121,8 @@ class Agenda extends React.Component {
         ) : (
           false
         )
-
+      const { viewType: eventViewType } = event;
+      const Event = getEventComponent(eventComponentsMap, eventViewType)
       return (
         <tr
           key={dayKey + '_' + idx}

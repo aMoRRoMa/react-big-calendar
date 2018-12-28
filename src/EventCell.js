@@ -1,3 +1,5 @@
+import get from 'lodash/get'
+
 import PropTypes from 'prop-types'
 import React from 'react'
 import cn from 'classnames'
@@ -22,12 +24,16 @@ let propTypes = {
   onDoubleClick: PropTypes.func,
 }
 
+const getEventComponent = (componentsMap, type) =>
+  get(componentsMap, type, null)
+
 class EventCell extends React.Component {
   render() {
     let {
       style,
       className,
       event,
+      event: { viewType: eventViewType, mainColor: eventMainColor },
       selected,
       isAllDay,
       onSelect,
@@ -38,9 +44,11 @@ class EventCell extends React.Component {
       accessors,
       getters,
       children,
-      components: { event: Event, eventWrapper: EventWrapper },
+      components: { event: eventComponentsMap, eventWrapper: EventWrapper },
       ...props
     } = this.props
+  
+    const Event = getEventComponent(eventComponentsMap, eventViewType)
 
     let title = accessors.title(event)
     let tooltip = accessors.tooltip(event)
@@ -73,12 +81,19 @@ class EventCell extends React.Component {
         <button
           {...props}
           style={{ ...userProps.style, ...style }}
-          className={cn('rbc-event', className, userProps.className, {
-            'rbc-selected': selected,
-            'rbc-event-allday': showAsAllDay,
-            'rbc-event-continues-prior': continuesPrior,
-            'rbc-event-continues-after': continuesAfter,
-          })}
+          className={cn(
+            'rbc-event',
+            `rbc-event-${eventViewType}`,
+            eventMainColor && `rbc-event-main-color__${eventMainColor}`,
+            className,
+            userProps.className,
+            {
+              'rbc-selected': selected,
+              'rbc-event-allday': showAsAllDay,
+              'rbc-event-continues-prior': continuesPrior,
+              'rbc-event-continues-after': continuesAfter,
+            },
+          )}
           onClick={e => onSelect && onSelect(event, e)}
           onDoubleClick={e => onDoubleClick && onDoubleClick(event, e)}
         >
