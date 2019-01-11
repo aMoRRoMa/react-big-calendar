@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { Fragment } from 'react'
 import { findDOMNode } from 'react-dom'
 import cn from 'classnames'
 
@@ -89,17 +89,19 @@ class DayColumn extends React.Component {
     this._timeIndicatorTimeout = window.setTimeout(() => {
       this.positionTimeIndicator()
       this.triggerTimeIndicatorUpdate()
-    }, 60000)
+    }, 1000)
   }
 
   positionTimeIndicator() {
     const { min, max, getNow } = this.props
     const current = getNow()
     const timeIndicator = this.refs.timeIndicator
+    const timeIndicatorDot = this.refs.timeIndicatorDot
 
     if (current >= min && current <= max) {
       const { top } = this.slotMetrics.getRange(current, current)
       timeIndicator.style.top = `${top}%`
+      timeIndicatorDot.style.top = `${top}%`
     }
   }
 
@@ -162,7 +164,13 @@ class DayColumn extends React.Component {
           </div>
         )}
         {isNow && (
-          <div ref="timeIndicator" className="rbc-current-time-indicator" />
+          <Fragment>
+            <div ref="timeIndicator" className="rbc-current-time-indicator" />
+            <div
+              ref="timeIndicatorDot"
+              className="rbc-current-time-indicator-dot"
+            />
+          </Fragment>
         )}
       </div>
     )
