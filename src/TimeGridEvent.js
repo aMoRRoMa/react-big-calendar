@@ -1,7 +1,9 @@
 import get from 'lodash/get'
 
-import cn from 'classnames'
 import React from 'react'
+import cn from 'classnames'
+
+import DefaultEventLabel from './EventLabel'
 
 const getEventComponent = (componentsMap, type) =>
   get(componentsMap, type, null)
@@ -12,7 +14,7 @@ function TimeGridEvent(props) {
     style,
     className,
     event,
-    event: { viewType: eventViewType, mainColor: eventMainColor },
+    event: { viewType: eventViewType, mainColor: eventMainColor, disabled },
     accessors,
     isRtl,
     selected,
@@ -22,9 +24,14 @@ function TimeGridEvent(props) {
     getters,
     onClick,
     onDoubleClick,
-    components: { event: eventComponentsMap, eventWrapper: EventWrapper },
+    components: {
+      event: eventComponentsMap,
+      eventWrapper: EventWrapper,
+      label: EventLabelComponent,
+    },
   } = props
 
+  const EventLabel = EventLabelComponent || DefaultEventLabel
   const Event = getEventComponent(eventComponentsMap, eventViewType)
 
   let title = accessors.title(event)
@@ -36,9 +43,7 @@ function TimeGridEvent(props) {
 
   let { height, top, width, xOffset } = style
   const inner = [
-    <div key="1" className="rbc-event-label">
-      {label}
-    </div>,
+    <EventLabel key="1" {...props} />,
     <div key="2" className="rbc-event-content">
       {Event ? <Event event={event} title={title} /> : title}
     </div>,
@@ -65,6 +70,7 @@ function TimeGridEvent(props) {
           'rbc-event',
           `rbc-event-${eventViewType}`,
           eventMainColor && `rbc-event-main-color__${eventMainColor}`,
+          disabled && `rbc-event-disabled`,
           className,
           userProps.className,
           {
